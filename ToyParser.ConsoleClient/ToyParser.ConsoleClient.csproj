@@ -7,4 +7,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ToyParser\ToyParser.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AngleSharp.Io" Version="0.17.0" />
+    </ItemGroup>
+
 </Project>
