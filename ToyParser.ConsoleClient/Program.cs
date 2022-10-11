@@ -7,4 +7,4 @@ var configuration = Configuration.Default;
 var loader = new PageLoader(new HttpClient(), configuration);
 var categoryParser = new CategoryParser(loader);
 
-var product = categoryParser.Parse("https://www.toy.ru/catalog/boy_transport/");
+var product = categoryParser.Parse("https://www.toy.ru/catalog/boy_transport/").Result;

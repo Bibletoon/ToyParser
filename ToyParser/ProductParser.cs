@@ -14,14 +14,16 @@ public class ProductParser
         _loader = loader;
     }
 
-    public Product Parse(string pageUrl)
+    public async Task<Product> ParseAsync(string pageUrl)
     {
-        var document = _loader.LoadPage(pageUrl).Result;
+        var document = await _loader.LoadPage(pageUrl);
         var product = new Product();
+
 
         product.Region = document.QuerySelector(".select-city-link > a").TextContent.Trim();
         product.Name = document.QuerySelector("h1").TextContent.Trim();
-        product.Breadcrumbs = document.QuerySelectorAll(".breadcrumb-item:not(:last-child)").Select(e => e.TextContent.Trim()).ToArray();
+        product.Breadcrumbs = document.QuerySelectorAll(".breadcrumb-item:not(:last-child)")
+            .Select(e => e.TextContent.Trim()).ToArray();
 
         if (IsAvailable(document))
         {
@@ -31,9 +33,11 @@ public class ProductParser
             product.OldPrice = oldPrice is null ? null : ParsePrice(oldPrice);
         }
 
-        product.Images = document.QuerySelectorAll(".card-slider-for > div > a > img").Select(e => e.GetAttribute("src").Trim()).ToArray();
+        product.Images = document.QuerySelectorAll(".card-slider-for > div > a > img")
+            .Select(e => e.GetAttribute("src").Trim()).ToArray();
 
         return product;
+
     }
 
     private bool IsAvailable(IDocument document)
