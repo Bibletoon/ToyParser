@@ -29,7 +29,7 @@ public class PageLoader
 
             var content = await response.Content.ReadAsStringAsync();
             HttpClientPool.Return(client);
-            return await context.OpenAsync(res => res.Content(content));
+            return await context.OpenAsync(res => res.Header("Content-Type", "text/html; charset=utf-8").Content(content));
         }
     }
 }

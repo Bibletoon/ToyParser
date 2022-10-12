@@ -1,8 +1,8 @@
-using AngleSharp;
+﻿using AngleSharp;
 using ToyParser;
 using ToyParser.Tools.CsvExporter;
 
-var configuration = Configuration.Default;
+var configuration = Configuration.Default.WithLocaleBasedEncoding();
 var loader = new PageLoader(configuration);
 var categoryParser = new CategoryParser(loader);
 
