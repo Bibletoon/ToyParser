@@ -23,6 +23,7 @@ public class ProductParser
         product.Breadcrumbs = document.QuerySelectorAll(".breadcrumb-item:not(:last-child)")
             .Select(e => e.TextContent.Trim())
             .ToArray();
+        product.Url = pageUrl;
 
         if (IsAvailable(document))
         {
