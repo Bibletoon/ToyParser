@@ -1,9 +1,8 @@
 ﻿using System.Net;
 using AngleSharp;
 using AngleSharp.Dom;
-using ToyParser.Tools;
 
-namespace ToyParser;
+namespace ToyParser.Tools;
 
 public class PageLoader
 {

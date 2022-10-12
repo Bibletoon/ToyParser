@@ -1,8 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using AngleSharp.Dom;
 using ToyParser.Models;
+using ToyParser.Tools;
 
-namespace ToyParser;
+namespace ToyParser.Parsers;
 
 public class ProductParser
 {

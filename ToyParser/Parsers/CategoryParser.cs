@@ -1,8 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using AngleSharp.Dom;
 using ToyParser.Models;
+using ToyParser.Tools;
 
-namespace ToyParser;
+namespace ToyParser.Parsers;
 
 public class CategoryParser
 {

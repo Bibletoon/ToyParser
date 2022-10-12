@@ -1,4 +1,4 @@
-﻿namespace ToyParser;
+﻿namespace ToyParser.Models;
 
 public class Product
 {
