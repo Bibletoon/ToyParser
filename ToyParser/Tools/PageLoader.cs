@@ -14,13 +14,20 @@ public class PageLoader
         _configuration = configuration;
     }
 
-    public async Task<IDocument> LoadPage(string url)
+    public async Task<IDocument> LoadPage(string url, string? cookies)
     {
         var client = HttpClientPool.Get();
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+        if (cookies is not null)
+        {
+            request.Headers.Add("Cookie", cookies);
+        }
+
         var context = BrowsingContext.New(_configuration);
         while (true)
         {
-            var response = await client.GetAsync(url);
+            var response = await client.SendAsync(request);
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 await Task.Delay(100);

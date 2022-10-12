@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using AngleSharp.Dom;
+using ToyParser.Models;
 
 namespace ToyParser;
 
@@ -12,19 +13,20 @@ public class CategoryParser
         _loader = loader;
     }
 
-    public async Task<List<Product>> Parse(string categoryUrl)
+    public async Task<List<Product>> Parse(string categoryUrl, Region? region = null)
     {
-        var document = await _loader.LoadPage($"{categoryUrl}?count=45");
+        var document = await _loader.LoadPage($"{categoryUrl}?count=45", region?.Cookie);
 
-        var pagesCount = int.Parse(
-            document.QuerySelector(".pagination > .page-item:nth-last-child(2) > a")
+        var pagesCountString =
+            document.QuerySelector(".pagination > .page-item:nth-last-child(2) > a")?
                 .TextContent
-                .Trim());
+                .Trim() ?? "1";
+        var pagesCount = int.Parse(pagesCountString);
         var productsLinks = new List<string>();
 
         for (var i = 1; i <= pagesCount; i++)
         {
-            document = await _loader.LoadPage($"{categoryUrl}?count=45&PAGEN_5={i}");
+            document = await _loader.LoadPage($"{categoryUrl}?count=45&PAGEN_5={i}", region?.Cookie);
             productsLinks.AddRange(ParseProductLinks(document));
         }
 
@@ -32,7 +34,7 @@ public class CategoryParser
         await Parallel.ForEachAsync(productsLinks, async (productUrl, token) =>
         {
             var parser = new ProductParser(_loader);
-            var product = await parser.ParseAsync($"https://toy.ru{productUrl}");
+            var product = await parser.ParseAsync($"https://toy.ru{productUrl}", region);
             products.Add(product);
         });
 

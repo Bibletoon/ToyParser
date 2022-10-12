@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using AngleSharp.Dom;
+using ToyParser.Models;
 
 namespace ToyParser;
 
@@ -13,9 +14,9 @@ public class ProductParser
         _loader = loader;
     }
 
-    public async Task<Product> ParseAsync(string pageUrl)
+    public async Task<Product> ParseAsync(string pageUrl, Region? region)
     {
-        var document = await _loader.LoadPage(pageUrl);
+        var document = await _loader.LoadPage(pageUrl, region?.Cookie);
         var product = new Product();
 
         product.Region = document.QuerySelector(".select-city-link > a").TextContent.Trim();
