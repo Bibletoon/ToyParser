@@ -1,22 +1,23 @@
 ﻿using System.Net;
 using AngleSharp;
 using AngleSharp.Dom;
+using ToyParser.Tools;
 
 namespace ToyParser;
 
 public class PageLoader
 {
-    private readonly IConfiguration _config;
+    private readonly IConfiguration _configuration;
 
-    public PageLoader(HttpClient client, IConfiguration configuration)
+    public PageLoader(IConfiguration configuration)
     {
-        _config = configuration;
+        _configuration = configuration;
     }
 
     public async Task<IDocument> LoadPage(string url)
     {
-        var client = new HttpClient();
-        var context = BrowsingContext.New(_config);
+        var client = HttpClientPool.Get();
+        var context = BrowsingContext.New(_configuration);
         while (true)
         {
             var response = await client.GetAsync(url);
@@ -26,6 +27,7 @@ public class PageLoader
                 continue;
             }
             var content = await response.Content.ReadAsStringAsync();
+            HttpClientPool.Return(client);
             return await context.OpenAsync(res => res.Content(content));
         }
     }
