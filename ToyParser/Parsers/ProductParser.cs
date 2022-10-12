@@ -1,12 +1,11 @@
 ﻿using System.Text.RegularExpressions;
-using AngleSharp;
 using AngleSharp.Dom;
 
 namespace ToyParser;
 
 public class ProductParser
 {
-    private static readonly Regex PriceRegex = new Regex(@"[\d, \,]+", RegexOptions.Compiled);
+    private static readonly Regex PriceRegex = new(@"[\d, \,]+", RegexOptions.Compiled);
     private readonly PageLoader _loader;
 
     public ProductParser(PageLoader loader)
@@ -19,11 +18,11 @@ public class ProductParser
         var document = await _loader.LoadPage(pageUrl);
         var product = new Product();
 
-
         product.Region = document.QuerySelector(".select-city-link > a").TextContent.Trim();
         product.Name = document.QuerySelector("h1").TextContent.Trim();
         product.Breadcrumbs = document.QuerySelectorAll(".breadcrumb-item:not(:last-child)")
-            .Select(e => e.TextContent.Trim()).ToArray();
+            .Select(e => e.TextContent.Trim())
+            .ToArray();
 
         if (IsAvailable(document))
         {
@@ -34,10 +33,10 @@ public class ProductParser
         }
 
         product.Images = document.QuerySelectorAll(".card-slider-for > div > a > img")
-            .Select(e => e.GetAttribute("src").Trim()).ToArray();
+            .Select(e => e.GetAttribute("src").Trim())
+            .ToArray();
 
         return product;
-
     }
 
     private bool IsAvailable(IDocument document)

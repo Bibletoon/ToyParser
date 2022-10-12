@@ -26,6 +26,7 @@ public class PageLoader
                 await Task.Delay(100);
                 continue;
             }
+
             var content = await response.Content.ReadAsStringAsync();
             HttpClientPool.Return(client);
             return await context.OpenAsync(res => res.Content(content));
